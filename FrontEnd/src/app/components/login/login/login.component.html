@@ -1,0 +1,115 @@
+<app-navbar-inicio></app-navbar-inicio>
+<div class="login-container">
+  <!-- Paso 1: Formulario de credenciales -->
+  <div *ngIf="!verificationStep" class="login-form">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Logo Finer" class="logo-img">
+      <h1>Bienvenido a Finer</h1>
+    </div>
+
+    <form (ngSubmit)="iniciarSesion()">
+      <div class="form-group">
+        <label for="nombreUsuario">Nombre de Usuario</label>
+        <input
+          type="text"
+          id="nombreUsuario"
+          name="nombreUsuario"
+          [(ngModel)]="nombreUsuario"
+          required
+          placeholder="Ingresa tu nombre de usuario"
+        >
+      </div>
+
+      <div class="form-group password-group">
+        <label for="contrasena">Contraseña</label>
+        <div class="password-wrapper">
+          <input
+            [type]="mostrarContrasena ? 'text' : 'password'"
+            id="contrasena"
+            name="contrasena"
+            [(ngModel)]="contrasenia"
+            required
+            placeholder="Ingresa tu contraseña"
+          >
+          <button type="button" (click)="toggleMostrarContrasena()" class="toggle-password">
+            <span *ngIf="mostrarContrasena">🙈</span>
+            <span *ngIf="!mostrarContrasena">👁️</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="form-group text-center">
+        <a href="#" class="forgot-password" (click)="$event.preventDefault()">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button type="submit" class="btn-login" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Iniciar Sesión</span>
+        <span *ngIf="isLoading">Verificando...</span>
+      </button>
+
+      <div *ngIf="errorMensaje" class="error-message">
+        {{ errorMensaje }}
+      </div>
+    </form>
+
+  
+
+    <div class="text-center register-section">
+      <p class="register-text">¿No tienes una cuenta? 
+        <a href="#" class="register-link" (click)="navigateToRegister(); $event.preventDefault()">Regístrate</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Paso 2: Verificación de código -->
+  <div *ngIf="verificationStep" class="verification-form">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Logo Finer" class="logo-img">
+      <h1>Verificación de Seguridad</h1>
+    </div>
+
+    <div class="verification-info">
+      <p>Hemos enviado un código de 6 dígitos a:</p>
+      <p class="user-email">{{ maskedEmail }}</p>
+      <p class="verification-instructions">Ingresa el código que recibiste para continuar</p>
+    </div>
+    
+    <form (ngSubmit)="verifyCode()">
+      <div class="form-group">
+        <input
+          type="text"
+          id="verificationCode"
+          name="verificationCode"
+          [(ngModel)]="verificationCode"
+          placeholder="Código de 6 dígitos"
+          maxlength="6"
+          inputmode="numeric"
+          required
+          class="verification-input"
+        >
+      </div>
+
+      <button type="submit" class="btn-login" [disabled]="isLoading || !verificationCode || verificationCode.length !== 6">
+        <span *ngIf="!isLoading">Verificar</span>
+        <span *ngIf="isLoading">Verificando...</span>
+      </button>
+
+      <div *ngIf="errorMensaje" class="error-message">
+        {{ errorMensaje }}
+      </div>
+
+      <div class="resend-section text-center">
+        <p>¿No recibiste el código?</p>
+        <button 
+          type="button" 
+          class="btn-resend" 
+          (click)="resendCode()" 
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">Reenviar código</span>
+          <span *ngIf="isLoading">Enviando...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

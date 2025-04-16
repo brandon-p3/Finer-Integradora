@@ -1,0 +1,38 @@
+<app-navbar-admin></app-navbar-admin>
+
+<div class="filters">
+  <input type="text" placeholder="Buscar por nombre" (input)="filtrarUsuarios($event)">
+</div>
+
+<div class="container">
+    <!-- Sección de Estudiantes -->
+    <div class="section">
+      <h2>Estudiantes</h2>
+      <div class="card-container">
+        <div class="card" *ngFor="let alumno of alumnosFiltrados">
+          <p><strong>Nombre:</strong> {{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</p>
+          <div class="details">
+            <p><strong>Username:</strong> {{ alumno.nombreUsuario }}</p>
+            <p><strong>Correo:</strong> {{ alumno.correo }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Sección de Instructores -->
+    <div class="section">
+      <h2>Instructores</h2>
+      <div class="card-container">
+        <div class="card" *ngFor="let instructor of instructoresFiltrados">
+          <p><strong>Nombre:</strong> {{ instructor.nombre }} {{ instructor.apellidoPaterno }} {{ instructor.apellidoMaterno }}</p>
+          <div class="details">
+            <p><strong>Username:</strong> {{ instructor.nombreUsuario }}</p>
+            <p><strong>Correo:</strong> {{ instructor.correo }}</p>
+            <p><strong>Teléfono:</strong> {{ instructor.telefono }}</p>
+            <p><strong>Dirección:</strong> {{ instructor.direccion }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

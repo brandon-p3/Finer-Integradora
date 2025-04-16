@@ -1,0 +1,73 @@
+<app-navbar-alumno></app-navbar-alumno>
+
+<div class="course-page">
+  <!-- Agregar FontAwesome a tu archivo index.html dentro de la etiqueta <head> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <div class="container" *ngFor="let curso of cursos">
+    <header class="course-header">
+      <div class="header-left">
+        <!-- Icono de flecha hacia la izquierda sin texto -->
+        <a [routerLink]="'/alumnos/cursos'">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+      </div>
+
+      <h1 class="course-title">{{ curso.titulo }}</h1>
+      <div class="header-right">
+        <!-- Mostrar botón "Inscribirme" si el alumno no está inscrito -->
+        <button *ngIf="!estaInscrito(curso)" class="enroll-btn" (click)="inscribirse(curso)">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Inscribirme</span>
+        </button>
+
+        <!-- Mostrar botón "Acceder al contenido" si el alumno está inscrito -->
+        <button *ngIf="estaInscrito(curso)" class="enroll-btn" (click)="accederCurso(curso)">
+          <i class="fa-solid fa-arrow-right"></i>
+          <span>Acceder al contenido</span>
+        </button>
+
+      </div>
+    </header>
+
+    <main class="course-content">
+      <div class="course-image-container">
+        <img [src]="curso.imagen" alt="Imagen del curso: {{ curso.titulo }}" class="course-image">
+        <div class="course-tags">
+          <span class="tag">{{ curso.categoria }}</span>
+          <span class="tag">{{ curso.cantidadTemas }} temas</span>
+        </div>
+      </div>
+
+      <div class="course-info">
+        <div class="course-description">
+          <h2>Descripción del curso</h2>
+          <p>{{ curso.descripcion }}</p>
+        </div>
+
+        <div class="course-meta">
+          <div class="instructor-info">
+            <h3>Instructor</h3>
+            <div class="instructor-profile">
+              <div class="instructor-avatar">
+                <i class="fa-solid fa-chalkboard-teacher"></i>
+              </div>
+              <div class="instructor-name">{{ curso.instructor }}</div>
+            </div>
+          </div>
+
+          <div class="course-stats">
+            <div class="stat-item">
+              <i class="fa-solid fa-book"></i>
+              <span>{{ curso.cantidadTemas }} temas</span>
+            </div>
+            <div class="stat-item">
+              <i class="fa-solid fa-tag"></i>
+              <span>{{ curso.categoria }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

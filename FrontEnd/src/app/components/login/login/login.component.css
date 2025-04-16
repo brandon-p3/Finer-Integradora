@@ -1,0 +1,265 @@
+/* Estilos generales */
+.login-container {
+    max-width: 420px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    margin-top: 7%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .logo {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .logo-img {
+    max-width: 120px;
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+    color: #2d6a4f;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  /* Formularios */
+  .login-form, .verification-form {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.95rem;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #2d6a4f;
+    box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.2);
+  }
+  
+  /* Grupo de contraseña */
+  .password-group {
+    position: relative;
+  }
+  
+  .password-wrapper {
+    position: relative;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  /* Botones */
+  .btn-login {
+    width: 100%;
+    padding: 14px;
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 0.5rem;
+  }
+  
+  .btn-login:hover {
+    background-color: #245c43;
+  }
+  
+  .btn-login:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Login social */
+  .social-login {
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  
+  .btn-google {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-google:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .google-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Enlaces */
+  .forgot-password {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  
+  .forgot-password:hover {
+    color: #2d6a4f;
+    text-decoration: underline;
+  }
+  
+  .register-section {
+    margin-top: 1.5rem;
+  }
+  
+  .register-text {
+    color: #666;
+    font-size: 0.95rem;
+  }
+  
+  .register-link {
+    color: #2d6a4f;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .register-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Mensajes de error */
+  .error-message {
+    color: #e63946;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    text-align: center;
+    padding: 8px;
+    background-color: rgba(230, 57, 70, 0.1);
+    border-radius: 6px;
+  }
+  
+  /* Estilos específicos para verificación */
+  .verification-form {
+    text-align: center;
+  }
+  
+  .verification-info {
+    margin-bottom: 2rem;
+  }
+  
+  .user-email {
+    font-weight: 600;
+    color: #2d6a4f;
+    margin: 0.5rem 0;
+    font-size: 1.05rem;
+  }
+  
+  .verification-instructions {
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+  }
+  
+  .verification-input {
+    text-align: center;
+    letter-spacing: 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 15px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .resend-section {
+    margin-top: 1.5rem;
+  }
+  
+  .resend-section p {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .btn-resend {
+    background: none;
+    border: none;
+    color: #2d6a4f;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-resend:hover {
+    text-decoration: underline;
+  }
+  
+  .btn-resend:disabled {
+    color: #aaaaaa;
+    cursor: not-allowed;
+    text-decoration: none;
+  }
+  
+  /* Responsive */
+  @media (max-width: 480px) {
+    .login-container {
+      padding: 1.5rem;
+      margin: 1rem;
+      box-shadow: none;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+    
+    .verification-input {
+      font-size: 1.2rem;
+      letter-spacing: 6px;
+    }
+  }

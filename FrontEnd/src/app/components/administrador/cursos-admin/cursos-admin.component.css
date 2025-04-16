@@ -1,0 +1,622 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 20px;
+}
+
+/* ====== Secciones generales ====== */
+.section {
+  padding: 20px;
+  background: #F5F5F5;  /* Verde claro */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: left;
+  font-size: 22px;
+  color: #055052; /* Verde oscuro */
+  margin-bottom: 15px;
+}
+
+/* ====== "Cursos por Aprobar" ====== */
+/* Contenedor del carrusel */
+.pending-courses {
+  display: flex;
+  -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+  scrollbar-width: none;  /* Para Firefox */
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+  gap: 20px;
+  padding: 10px 5px 20px 5px;
+  scrollbar-width: thin;  
+  scrollbar-color: #8EC3B0 #f1f1f1;
+}
+
+/* Ocultar la barra de desplazamiento pero mantener la funcionalidad */
+.pending-courses::-webkit-scrollbar {
+  height: 10px;
+}
+
+.pending-courses::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.pending-courses::-webkit-scrollbar-thumb {
+  background: #8EC3B0;
+  border-radius: 10px;
+}
+
+.pending-card {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.15);
+  width: 90%; 
+  min-width: 400px; 
+  max-width: 700px;
+  scroll-snap-align: start;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.pending-card:hover {
+  transform: scale(1.03);
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenido de la tarjeta - cambiado a flex-direction: row */
+.card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Estilo para el contenedor de la imagen - ahora más pequeño y a la izquierda */
+.curso-imagen-pendiente {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.curso-imagen-pendiente img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 2px solid #8EC3B0;
+  border-radius: 8px;
+  transition: transform 0.5s ease;
+}
+
+.pending-card:hover .curso-imagen-pendiente img {
+  transform: scale(1.05);
+}
+
+/* Texto y botones - ahora el texto tiene flex-grow para empujar los botones abajo */
+.text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: calc(100% - 115px);
+}
+
+/* Para asegurar que el contenido de texto ocupe suficiente espacio vertical */
+.text p:last-of-type {
+  margin-bottom: auto; /* Empuja los botones hacia abajo */
+}
+
+h3 {
+  color: #055052; /* Verde oscuro */
+  font-size: 22px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+p {
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* botones */
+
+.buttons {
+  display: flex;
+  gap: 1px; /* Más espacio entre botones */
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.btn {
+  padding: 10px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 620;
+  transition: all 0.2s ease;
+  min-width: 70px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* Clase para el primer botón */
+.info {
+  background: linear-gradient(135deg, #5B9BD5, #4A89C4);
+  color: white;
+}
+
+.info:hover {
+  background: #3A7AB8;
+}
+
+.approve {
+  background: linear-gradient(135deg, #8EC3B0, #7AB8A3);
+  color: white;
+}
+
+.approve:hover {
+  background: #5AA68E;
+}
+
+.reject {
+  background: linear-gradient(135deg, #D65B5B, #C44A4A);
+  color: white;
+}
+
+.reject:hover {
+  background: #B63C3C;
+}
+
+/* Efecto de onda al hacer clic (opcional) */
+.btn::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform 0.4s, opacity 0.5s;
+}
+
+.btn:active::after {
+  transform: scale(0, 0);
+  opacity: 0.3;
+  transition: 0s;
+}
+/* Media query para pantallas más pequeñas */
+@media (max-width: 480px) {
+  .card-content {
+    flex-direction: column;
+  }
+  
+  .curso-imagen-pendiente {
+    width: 100%;
+    height: 120px;
+    margin-bottom: 10px;
+  }
+  
+  .text {
+    width: 100%;
+  }
+  
+  .buttons {
+    justify-content: center;
+  }
+}
+/* ======= "Todos los Cursos" ======= */
+/* Tarjetas */
+.pending-card {
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.15);
+  width: 370px;
+  min-width: 370px; /* Evita que las tarjetas se reduzcan */
+  scroll-snap-align: start; /* Asegura el ajuste en el scroll */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pending-card:hover {
+  transform: scale(1.03);
+  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.all-courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.all-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.all-card:hover {
+  transform: scale(1.03);
+}
+
+/* Estilos para el contenedor de la imagen */
+.curso-imagen {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden; /* Evita que la imagen se salga del contenedor */
+}
+
+/* Estilos para la imagen */
+.curso-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Mantiene la proporción y cubre el contenedor */
+  border: 2px solid #8EC3B0;
+  border-radius: 8px;
+}
+
+.all-card .details {
+  background: #055052;
+  color: white;
+  margin-top: 10px;
+}
+
+/* ====== Estilos para los Filtros ====== */
+.filters {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.filters input, .filters select {
+  padding: 10px;
+  border: 2px solid #8EC3B0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #FFFF;
+  color: #333;
+  transition: all 0.3s ease-in-out;
+}
+
+.filters input::placeholder {
+  color: #555;
+}
+
+.filters select {
+  cursor: pointer;
+}
+
+.filters input:hover,
+.filters select:hover {
+  background-color: #9ED5C5;
+  border-color: #9ED5C5;
+  transform: scale(1.05);
+}
+
+
+/* ======== ESTILOS DE MODAL DE RECHAZO ====== */
+
+/* Estilos para el modal */
+.modal-overlay-rechazo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.cancel {
+  background-color: gray;
+  color: white;
+}
+
+.reject {
+  background-color: red;
+  color: white;
+}
+
+
+/* ========= ESTILOS PARA MODAL DE TEMAS ======= */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 15px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+.temas-lista {
+  margin-top: 20px;
+}
+
+.tema-item {
+  margin-bottom: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tema-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tema-header:hover {
+  background-color: #ebebeb;
+}
+
+.tema-titulo {
+  font-weight: 500;
+}
+
+.tema-toggle {
+  color: #666;
+}
+
+.tema-contenido {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.tema-contenido.expandido {
+  padding: 15px;
+  max-height: 300px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* ======== MODAL DE DETALLES DEL CURSO =========== */
+/* Estilos mejorados para el modal del administrador */
+.modal-overlay-detalles {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo más oscuro */
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(3px); /* Efecto sutil de desenfoque */
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 10px; /* Bordes más redondeados */
+  max-width: 650px; /* Modal un poco más ancho */
+  width: 90%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Sombra más suave */
+  position: relative;
+  padding: 25px;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 26px;
+  cursor: pointer;
+  color: #777;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-header {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  color: #2c3e50;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  padding-right: 30px;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 20px;
+}
+
+.modal-imagen {
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-imagen img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+  max-height: 220px;
+  object-fit: cover;
+}
+
+.modal-info p {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+  color: #444;
+}
+
+.modal-info strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Para datos específicos */
+.curso-descripcion {
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.instructor-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.categoria-info {
+  display: inline-block;
+  background-color: #e9f5f9;
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: #3498db;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-imagen img {
+    max-height: 180px;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

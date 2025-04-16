@@ -1,0 +1,469 @@
+<!-- Contenedor principal -->
+<div class="main-container">
+    <!-- Cabecera -->
+    <app-navbar-instructor></app-navbar-instructor>
+
+    <!-- Contenedor para el contenido -->
+    <div class="content-container">
+        <!-- Contenido de la página -->
+        <div class="container">
+            <!-- Barra de búsqueda -->
+            <div class="search-filter-create-container">
+                <!-- Buscador -->
+                <div class="search-wrapper">
+                    <input type="text" class="search-bar" placeholder="Buscar cursos..." [(ngModel)]="searchQuery"
+                        (input)="applyFilters()">
+                    <img src="assets/lupa.png" alt="Buscar" class="search-icon">
+                </div>
+
+                <!-- Filtro A-Z/Z-A -->
+                <div class="order-wrapper">
+                    <select id="orden" [(ngModel)]="sortOption" (change)="applyFilters()">
+                        <option value="asc">A-Z</option>
+                        <option value="desc">Z-A</option>
+                    </select>
+                </div>
+
+                <!-- Botón Crear Curso -->
+                <button class="create-course-btn" (click)="createCourse()">
+                    + Crear Curso
+                </button>
+            </div>
+
+            <div *ngIf="currentPage === 'mis-cursos'">
+                <h2>Mis Cursos</h2>
+
+                <!-- Estado de carga -->
+                <div *ngIf="isLoading" class="loading-container">
+                    <div class="spinner"></div>
+                    <p>Cargando cursos...</p>
+                </div>
+
+                <!-- Mensaje de error -->
+                <div *ngIf="errorMessage" class="error-message">
+                    <p>{{ errorMessage }}</p>
+                </div>
+
+                <div *ngIf="noHayCursos && !isLoading" class="no-courses-message">
+                    <div class="message-container">
+                        <h3>Aún no tienes cursos creados</h3>
+                        <p>¡Comienza creando tu primer curso para compartir tu conocimiento!</p>
+                        <button class="create-course-btn primary" (click)="createCourse()">
+                            + Crear mi primer curso
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista de cursos -->
+                <div *ngIf="!isLoading && filteredCourses.length > 0" class="courses-grid">
+                    <div *ngFor="let curso of filteredCourses" class="course-card">
+                        <div class="course-image-container" *ngIf="curso.imagen">
+                            <img [src]="getImageUrl(curso.imagen)" alt="Imagen del curso" class="course-img-preview">
+                            <div class="course-status" [ngClass]="{
+                                'approved': curso.estatus === 'Aprobado',
+                                'rejected': curso.estatus === 'Rechazado',
+                                'pending': curso.estatus === 'Pendiente',
+                                'in-review': curso.estatus === 'En Revisión'
+                            }">
+                                {{ curso.estatus }}
+                            </div>
+                        </div>
+                        <div class="course-content">
+                            <h3>{{ curso.titulo }}</h3>
+                            <p class="course-description">{{ curso.descripcion }}</p>
+                            <div class="course-meta">
+                                <span class="course-category">{{ getCategoriaName(curso.categoria) }}</span>
+                            </div>
+                            <div class="course-actions">
+                                <button class="action-btn preview-btn" (click)="openPreviewModal(curso)" title="Vista previa">
+                                  <i class="fas fa-eye"></i>
+                                </button>
+                              
+                                <button class="action-btn edit-btn" 
+                                        [disabled]="shouldDisableEdit(curso)"
+                                        (click)="editCourse(curso)"
+                                        [title]="curso.estatus === 'rechazada' ? 'Reenviar curso' : 'Editar curso'">
+                                  <i [ngClass]="curso.estatus === 'rechazada' ? 'fas fa-paper-plane' : 'fas fa-edit'"></i>
+                                </button>
+                              
+                                <button class="action-btn temas-btn" (click)="openTemaModal(curso)" title="Temas del curso">
+                                  <i class="fas fa-list-ul"></i>
+                                </button>
+                              </div>
+                              
+                              
+                            <!-- Botón de Evaluación con ícono -->
+<button class="action-btn evaluacion-btn" 
+*ngIf="curso.estatus === 'Aprobado' || curso.estatus === 'aprobado'"
+(click)="openEvaluacionModal(curso)" 
+title="Gestionar Evaluación">
+<i class="fas fa-tasks"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!-- Modal Vista Previa Mejorado -->
+<div *ngIf="showPreviewModal && selectedCourse" class="modal-overlay preview-modal-overlay">
+    <div class="modal-content preview-modal-content">
+        <button class="close-modal-btn" (click)="closePreviewModal()">&times;</button>
+        
+        <div class="modal-header">
+            <div class="modal-title-container">
+                <h2 class="modal-course-title">{{ selectedCourse.titulo }}</h2>
+                <div class="modal-status" [ngClass]="{
+                    'approved': selectedCourse.estatus === 'Aprobado',
+                    'rejected': selectedCourse.estatus === 'Rechazado',
+                    'pending': selectedCourse.estatus === 'Pendiente',
+                    'in-review': selectedCourse.estatus === 'En Revisión'
+                }">
+                    {{ selectedCourse.estatus }}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="preview-main-content">
+                <!-- Sección de imagen y detalles principales -->
+                <div class="preview-image-section">
+                    <div class="image-container" *ngIf="selectedCourse.imagen">
+                        <img [src]="getImageUrl(selectedCourse.imagen)" 
+                             alt="Imagen del curso" 
+                             class="course-image-preview">
+                    </div>
+                    
+                    <div class="course-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Categoría:</span>
+                            <span class="detail-value">{{ getCategoriaName(selectedCourse.categoria) }}</span>
+                        </div>
+                        
+                        <div class="detail-item description-section">
+                            <span class="detail-label">Descripción:</span>
+                            <div class="detail-value">
+                                <div class="description-content">
+                                    {{ selectedCourse.descripcion }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección de Temas -->
+            <div class="temas-section">
+                <h4 class="section-title">Temas del Curso</h4>
+                
+                <div *ngIf="!selectedCourse.temas || selectedCourse.temas.length === 0" class="no-temas-message">
+                    <div class="empty-state">
+                        <img src="assets/images/empty-topics.svg" alt="No hay temas" class="empty-icon">
+                        <p>Este curso no tiene temas aún</p>
+                    </div>
+                </div>
+                
+                <div *ngIf="selectedCourse.temas && selectedCourse.temas.length > 0" class="temas-list">
+                    <div *ngFor="let tema of selectedCourse.temas; let i = index" class="tema-item">
+                        <div class="tema-header">
+                            <h5 class="tema-title">
+                                <span class="tema-number">Tema {{i+1}}:</span> 
+                                {{ tema.nombre }}
+                            </h5>
+                        </div>
+                        <div class="tema-content">{{ tema.contenido }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+    
+      
+            <button class="action-btn temas-btn" (click)="openTemaModal(selectedCourse)">Gestionar Temas</button>
+            <button class="action-btn close-btn" (click)="closePreviewModal()">Cerrar</button>
+               
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Edición Mejorado -->
+<div *ngIf="showEditModal" class="modal-overlay edit-modal-overlay">
+    <div class="modal-content edit-modal-content">
+        <button class="close-modal-btn" (click)="closeEditModal()">&times;</button>
+        <h2 class="modal-title">{{ isEditing ? 'Editar Curso' : 'Nuevo Curso' }}</h2>
+        
+        <div class="edit-form">
+            <div class="form-group">
+                <label for="titulo">Título del Curso</label>
+                <input type="text" id="titulo" [(ngModel)]="editFormData.titulo" 
+                       placeholder="Ingrese el título del curso" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" [(ngModel)]="editFormData.descripcion" 
+                    placeholder="Describa el contenido del curso" class="form-textarea"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <select id="categoria" class="form-control" [(ngModel)]="editFormData.idCategoria">
+                    <option value="">Seleccione una categoría</option>
+                    <option *ngFor="let categoria of categorias" [value]="categoria.idCategoria">
+                        {{categoria.nombreCategoria}}
+                    </option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="imagenUrl">URL de la Imagen del Curso</label>
+                <input type="url" id="imagenUrl" [(ngModel)]="editFormData.imagenUrl" 
+                       placeholder="Ingrese la URL de la imagen" class="form-input">
+                <p class="form-hint">Ejemplo: https://ejemplo.com/imagen.jpg</p>
+                
+                <div class="image-preview-container" *ngIf="editFormData.imagenUrl">
+                    <div class="image-preview">
+                        <img [src]="editFormData.imagenUrl" alt="Vista previa de la imagen" 
+                             class="preview-image" onerror="this.src='assets/images/default-course.jpg'">
+                        <button class="remove-image-btn" (click)="removeImage()">×</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div *ngIf="errorMessage" class="error-message">
+                <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn cancel-btn" (click)="closeEditModal()">Cancelar</button>
+                <button class="btn submit-btn" (click)="submitEditForm()" [disabled]="isLoading">
+                    <span *ngIf="!isLoading">Guardar Cambios</span>
+                    <span *ngIf="isLoading" class="loading-text">Guardando...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Temas -->
+<div *ngIf="showTemaModal && selectedCourseForTema" class="modal-overlay topic-modal-overlay">
+    <div class="modal-content topic-modal-content">
+        <button class="close-modal-btn" (click)="closeTemaModal()">&times;</button>
+        <div class="modal-header">
+            <h3>Gestionar Temas - {{selectedCourseForTema.titulo}}</h3>
+            <div class="modal-status" [ngClass]="{
+                'approved': selectedCourseForTema.estatus === 'Aprobado',
+                'rejected': selectedCourseForTema.estatus === 'Rechazado',
+                'pending': selectedCourseForTema.estatus === 'Pendiente',
+                'in-review': selectedCourseForTema.estatus === 'En Revisión'
+            }">
+                {{selectedCourseForTema.estatus}}
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <!-- Formulario para agregar/editar temas -->
+            <div class="form-group">
+                <label>Título del Tema</label>
+                <input type="text" class="form-control" [(ngModel)]="nuevoTema.nombre" 
+                       [disabled]="isLoading" placeholder="Ingrese el título del tema">
+            </div>
+            <div class="form-group">
+                <label>Contenido del Tema</label>
+                <textarea class="form-control" rows="6" [(ngModel)]="nuevoTema.contenido"
+                          [disabled]="isLoading" placeholder="Describa el contenido del tema"></textarea>
+            </div>
+
+            <div *ngIf="temasLoading" class="loading-temas">
+                <div class="spinner"></div>
+                <p>Cargando temas...</p>
+            </div>
+
+            <!-- Lista de temas registrados - Versión corregida -->
+            <div *ngIf="!temasLoading && temasDelCurso.length > 0" class="temas-list">
+                <h4 class="temas-title">Temas Registrados</h4>
+                <div *ngFor="let tema of temasDelCurso; let i = index" class="tema-item">
+                    <div class="tema-header">
+                        <h5 class="tema-nombre">
+                            <span class="tema-number">Tema {{i+1}}:</span> 
+                            {{tema.nombre }}
+                        </h5>
+                        <div class="tema-actions">
+                            <button *ngIf="canEditCourse(selectedCourseForTema)" 
+                                    class="action-btn edit-btn" 
+                                    (click)="cargarTemaParaEdicion(tema)"
+                                    [disabled]="isLoading">
+                                Editar
+                            </button>
+    
+                        </div>
+                    </div>
+                    <div class="tema-contenido">{{tema.contenido || 'Sin contenido'}}</div>
+                </div>
+            </div>
+            
+            <div *ngIf="!temasLoading && temasDelCurso.length === 0" class="no-temas-message">
+                <div class="empty-state">
+                    <img src="assets/images/empty-topics.svg" alt="No hay temas" class="empty-icon">
+                    <h4>Este curso no tiene temas aún</h4>
+                    <p>Comienza agregando el primer tema para este curso</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <div class="left-actions">
+                <button *ngIf="editingTema" 
+                        class="action-btn cancel-btn" 
+                        (click)="cancelarEdicionTema()"
+                        [disabled]="isLoading">
+                    Cancelar Edición
+                </button>
+            </div>
+
+            <div class="right-actions">
+                <button class="action-btn preview-btn" 
+                        (click)="agregarTema()"
+                        [disabled]="isLoading || !nuevoTema.nombre || !nuevoTema.contenido">
+                    {{ editingTema ? 'Guardar Cambios' : 'Agregar Tema' }}
+                </button>
+                
+                <button *ngIf="canSendToReview(selectedCourseForTema)" 
+                class="send-review-btn" 
+                (click)="enviarARevision()"
+                [disabled]="isLoading || temasDelCurso.length === 0"
+                [title]="temasDelCurso.length === 0 ? 'Debes agregar al menos un tema' : ''">
+            <i class="fas fa-paper-plane"></i> Enviar a Revisión
+        </button>
+                
+                <button class="action-btn close-btn" 
+                        (click)="closeTemaModal()"
+                        [disabled]="isLoading">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+        
+        <div *ngIf="isLoading" class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar curso -->
+<div *ngIf="showDeleteModal" class="modal-overlay">
+    <div class="modal-content confirmation-modal">
+        <h3>Confirmar Eliminación</h3>
+        <p>¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.</p>
+        
+        <div class="confirmation-actions">
+            <button class="btn cancel-btn" (click)="cancelDelete()">Cancelar</button>
+            <button class="btn delete-btn" (click)="deleteCourse()">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar tema -->
+<div *ngIf="showDeleteTemaModal" class="modal-overlay">
+    <div class="modal-content confirmation-modal">
+        <h3>Confirmar Eliminación</h3>
+        <p>¿Estás seguro de que deseas eliminar este tema? Esta acción no se puede deshacer.</p>
+        
+        <div class="confirmation-actions">
+            <button class="btn cancel-btn" (click)="cancelDeleteTema()">Cancelar</button>
+            <button class="btn delete-btn" (click)="deleteTema()">Eliminar</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="showEvaluacionModal && selectedCourseForEvaluacion" class="modal-overlay evaluacion-modal-overlay">
+    <div class="modal-content evaluacion-modal-content">
+      <button class="close-modal-btn" (click)="closeEvaluacionModal()">&times;</button>
+      
+      <div class="modal-header">
+        <h2>{{ existingEvaluacion ? 'Editar Evaluación' : 'Crear Evaluación' }}</h2>
+        <div class="course-title">{{ selectedCourseForEvaluacion.titulo }}</div>
+      </div>
+  
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Título de la Evaluación</label>
+          <input type="text" class="form-control" 
+                 [(ngModel)]="nuevaEvaluacion.tituloEvaluacion"
+                 placeholder="Ingrese el título de la evaluación">
+        </div>
+        
+        <div class="preguntas-section">
+          <h4>Preguntas</h4>
+          
+          <div *ngFor="let pregunta of nuevaEvaluacion.preguntas; let i = index" class="pregunta-item">
+            <div class="pregunta-header">
+              <h5>Pregunta {{i + 1}}</h5>
+              <button class="btn-remove" (click)="removePregunta(i)">
+                Eliminar
+              </button>
+            </div>
+            
+            <div class="form-group">
+              <input type="text" class="form-control" 
+                     [(ngModel)]="pregunta.pregunta"
+                     placeholder="Ingrese la pregunta" required>
+            </div>
+            
+            <div class="opciones-section">
+              <label>Opciones de Respuesta</label>
+              
+              <div *ngFor="let opcion of pregunta.opciones; let j = index" class="opcion-item">
+                <div class="opcion-controls">
+                  <input type="text" class="form-control" 
+                         [(ngModel)]="opcion.textoOpcion"
+                         placeholder="Texto de la opción">
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" [(ngModel)]="opcion.verificar">
+                    <span class="checkmark"></span>
+                    Correcta
+                  </label>
+                  
+                  <button class="btn-remove-small" 
+                          (click)="removeOpcion(i, j)"
+                          [disabled]="pregunta.opciones.length <= 2">
+                    ×
+                  </button>
+                </div>
+              </div>
+              
+              <button class="btn-add-opcion" (click)="addOpcion(i)">
+                + Agregar Opción
+              </button>
+            </div>
+          </div>
+          
+          <button class="btn-add-pregunta" (click)="addPregunta()">
+            + Agregar Pregunta
+          </button>
+        </div>
+      </div>
+  
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeEvaluacionModal()">
+          Cancelar
+        </button>
+        <button class="btn-submit" 
+                (click)="crearEvaluacion()"
+                [disabled]="!esEvaluacionValida() || isLoading">
+          {{ isLoading ? 'Guardando...' : 'Guardar Evaluación' }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Pie de página -->
+<footer class="footer">
+    <div>FINER | <a href="#">Términos y Condiciones</a> | <a href="#">Soporte</a> | <a href="#">Sobre Nosotros</a></div>
+    <div>Redes Sociales | Contacto | Derechos Reservados</div>
+</footer>

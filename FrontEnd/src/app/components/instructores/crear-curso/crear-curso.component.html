@@ -1,0 +1,129 @@
+<!-- Modal para vista previa -->
+<div class="modal-overlay" *ngIf="isModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Vista Previa del Curso</h2>
+      <button class="btn-close" (click)="closeModal()">&times;</button>
+    </div>
+    <h4>Nombre del Curso: {{ courseName }}</h4>
+    <h4>Categoría: {{ selectedCategory }}</h4>
+    <div class="image-preview" *ngIf="imageUrl">
+      <img [src]="imageUrl" alt="Vista previa de la imagen del curso" class="img-preview">
+    </div>
+    <p><strong>Descripción:</strong> {{ courseDescription }}</p>
+  </div>
+</div>
+
+<!-- Modal para Solicitar Nueva Categoría -->
+<div class="modal-overlay" *ngIf="isCategoriaModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Solicitar Nueva Categoría</h2>
+      <button class="btn-close" (click)="cerrarModal()">&times;</button>
+    </div>
+    
+    <div class="form-group">
+      <label>Nombre de la Categoría *</label>
+      <input type="text" class="form-input" 
+             placeholder="Ejemplo: Desarrollo Web"
+             [(ngModel)]="nuevaCategoriaNombre" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Descripción</label>
+      <textarea class="form-input" rows="3" 
+                placeholder="Escribe una breve descripción..."
+                [(ngModel)]="nuevaCategoriaDescripcion"></textarea>
+    </div>
+    
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+      <button class="btn-save" (click)="enviarSolicitudCategoria()">Solicitar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Contenedor principal -->
+<div class="main-container">
+  <!-- navBar -->
+  <app-navbar-instructor></app-navbar-instructor>
+
+  <!-- Crear Curso -->
+  <div class="content-container">
+    <h2>Crear Nuevo Curso</h2>
+
+    <!-- Botones Vista Previa y Eliminar -->
+    <div class="action-buttons">
+      <button class="btn-view" (click)="openPreview()" [disabled]="!isFormValid()">
+        <i class="fas fa-eye"></i> Vista Previa
+      </button>
+      <button class="btn-delete" (click)="clearForm()">
+        <i class="fas fa-trash"></i> Borrar
+      </button>
+    </div>
+
+    <!-- Nombre del Curso -->
+    <div class="form-group">
+      <label for="course-name">Nombre del Curso *</label>
+      <input type="text" id="course-name" class="form-input" 
+             placeholder="Ingrese el nombre del curso"
+             [(ngModel)]="courseName" required>
+    </div>
+
+    <!-- Descripción del Curso -->
+    <div class="form-group">
+      <label for="course-description">Descripción del Curso *</label>
+      <textarea id="course-description" class="form-input" 
+                placeholder="Ingrese una descripción general del curso"
+                [(ngModel)]="courseDescription" required></textarea>
+    </div>
+
+    <!-- Imagen del Curso (URL) -->
+    <div class="form-group">
+      <label for="course-image-url">URL de la Imagen del Curso</label>
+      <input type="url" id="course-image-url" class="form-input" 
+             placeholder="https://ejemplo.com/imagen.jpg"
+             [(ngModel)]="imageUrl"
+             (blur)="updateImageUrl($event)"
+             pattern="https?://.+">
+      <small class="form-text text-muted">Ingrese una URL válida comenzando con http:// o https://</small>
+      
+      <div class="image-preview" *ngIf="imageUrl">
+        <img [src]="imageUrl" alt="Vista previa" class="img-thumbnail">
+        <button class="btn-remove-image" (click)="removeImage()">
+          <i class="fas fa-trash"></i> 
+        </button>
+      </div>
+    </div>
+
+    <!-- Selección de Categoría -->
+    <div class="form-group">
+      <label for="course-category">Categoría *</label>
+      <div class="category-selection">
+        <select id="course-category" class="form-input" 
+                [(ngModel)]="selectedCategory" required>
+          <option value="">Seleccione una categoría</option>
+          <option *ngFor="let category of categories" [value]="category.nombreCategoria">
+            {{ category.nombreCategoria }}
+          </option>
+        </select>
+        <button class="btn-add-category" (click)="solicitarNuevaCategoria()" title="Solicitar nueva categoría">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Botón para guardar -->
+    <div class="form-actions">
+      <button class="btn-save" (click)="saveCourse()" [disabled]="!isFormValid()">
+        <i class="fas fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+
+  <!-- Pie de página -->
+  <footer class="footer">
+    <div>FINER | <a href="#">Términos y Condiciones</a> | <a href="#">Soporte</a> | <a href="#">Sobre Nosotros</a></div>
+    <div>Redes Sociales | Contacto | Derechos Reservados</div>
+  </footer>
+</div>

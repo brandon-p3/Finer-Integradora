@@ -1,0 +1,74 @@
+<app-navbar-alumno></app-navbar-alumno>
+
+<div class="courses-page">
+  <div class="container">
+    <!-- Banner superior -->
+    <div class="courses-header">
+      <h1>Explora nuestros cursos</h1>
+      <p>Encuentra el curso perfecto para ampliar tus conocimientos</p>
+    </div>
+
+    <!-- Sección de filtros -->
+    <div class="filters-section">
+      <div class="search-bar">
+        <i class="fa-solid fa-search search-icon"></i>
+        <input
+          type="text"
+          placeholder="Buscar por nombre de curso"
+          [(ngModel)]="nombreCurso"
+          (input)="onNombreCursoChange($event)"
+        >
+      </div>
+
+      <div class="filter-options">
+        <div class="filter-dropdown">
+          <select [(ngModel)]="categoriaSeleccionada" (change)="onCategoriaChange($event)">
+            <option value="">Filtrar por categoría</option>
+            <option *ngFor="let categoria of categoriasUnicas" [value]="categoria">
+              {{ categoria }}
+            </option>
+
+          </select>
+          <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+        </div>
+
+        <!-- Puedes agregar más filtros aquí si es necesario -->
+      </div>
+    </div>
+
+    <!-- Resultados de cursos -->
+    <main class="courses-results">
+      <!-- Mensaje cuando no hay resultados -->
+      <div *ngIf="cursosFiltrados.length === 0" class="no-results">
+        <i class="fa-solid fa-search-minus"></i>
+        <h2>No se encontraron cursos</h2>
+        <p>Intenta con otros términos de búsqueda o filtros</p>
+      </div>
+
+      <!-- Grid de cursos -->
+      <div class="courses-grid">
+        <div *ngFor="let curso of cursosFiltrados" class="course-card">
+          <div class="curso-imagen">
+            <img [src]="curso.imagen" alt="Imagen de {{ curso.tituloCurso }}"
+            onerror="this.src='assets/default-curso.jpg'">
+          </div>
+
+          <div class="course-info">
+            <h3 class="course-title">{{ curso.tituloCurso }}</h3>
+            <h4 class="course-description">{{ curso.nombreCategoria }}</h4>
+            <p class="course-description">{{ curso.descripcion }}</p>
+
+
+            <div class="course-actions">
+             
+              <button class="btn-secondary" (click)="verDetallesCurso(curso.tituloCurso)">
+                <i class="fa-solid fa-info-circle"></i>
+                <span>Detalles</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
